@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flexbox and Grid Layout Guide</title>
+<style>
+  :root { --ink:#14213d; --bg:#eef2f5; --card:#ffffff; --teal:#0b7285; --amber:#f4a259; --line:#cfd8df; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+  body { margin:0; font-family: Georgia, "Times New Roman", serif; line-height:1.6; color:var(--ink); background:var(--bg); }
+  h1, h2, h3, nav, code, th { font-family: "Trebuchet MS", Verdana, sans-serif; }
+
+  /* ---------- MENU: horizontal icon bar (flexbox) ---------- */
+  .iconbar { position:sticky; top:0; z-index:10; display:flex; background:var(--ink); }
+  .iconbar a { flex:1; text-align:center; padding:12px 8px; color:#fff; text-decoration:none; font-size:15px; transition:background .2s; }
+  .iconbar a span { display:block; font-size:22px; line-height:1.2; }
+  .iconbar a:hover, .iconbar a:focus-visible { background:var(--teal); outline:none; }
+  .iconbar a.active { background:var(--amber); color:var(--ink); }
+  @media (max-width:480px) { .iconbar a { font-size:12px; padding:8px 2px; } }
+
+  header { padding:48px 20px 24px; text-align:center; }
+  h1 { font-size:clamp(2rem, 5vw, 3rem); margin:0 0 8px; }
+  header p { max-width:60ch; margin:0 auto; }
+  main { max-width:1000px; margin:0 auto; padding:0 20px 40px; }
+  section { margin:40px 0; }
+  h2 { border-bottom:3px solid var(--amber); padding-bottom:6px; }
+  code { background:#dde6ec; padding:1px 6px; border-radius:4px; font-size:.92em; }
+
+  /* ---------- Demo: Flexbox ---------- */
+  .flex-demo { display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; }
+  .flex-demo .card { flex:1 1 220px; }
+
+  /* ---------- Demo: Grid ---------- */
+  .grid-demo { display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; }
+  .grid-demo .wide { grid-column: span 2; }
+  @media (max-width:700px) { .grid-demo { grid-template-columns:1fr 1fr; } }
+  @media (max-width:480px) { .grid-demo { grid-template-columns:1fr; } .grid-demo .wide { grid-column:auto; } }
+
+  .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:16px; }
+  .card img { width:100%; height:110px; object-fit:cover; border-radius:6px; display:block; margin-bottom:10px; }
+  .card h3 { margin:0 0 6px; }
+
+  /* ---------- Page layout: text + side list (grid) ---------- */
+  .two-col { display:grid; grid-template-columns:2fr 1fr; gap:24px; align-items:start; }
+  @media (max-width:700px) { .two-col { grid-template-columns:1fr; } }
+  .table-wrap { overflow-x:auto; }
+  table { border-collapse:collapse; width:100%; background:var(--card); }
+  th, td { text-align:left; padding:8px 10px; border:1px solid var(--line); vertical-align:top; }
+  th { background:var(--ink); color:#fff; }
+  footer { text-align:center; padding:24px; background:var(--ink); color:#fff; }
+</style>
+</head>
+<body>
+
+<!-- Menu -->
+<nav class="iconbar" aria-label="Main menu">
+  <a class="active" href="#home"><span>&#8962;</span>Home</a>
+  <a href="#flexbox"><span>&#9776;</span>Flexbox</a>
+  <a href="#grid"><span>&#9638;</span>Grid</a>
+  <a href="#responsive"><span>&#8596;</span>Responsive</a>
+  <a href="#features"><span>&#9733;</span>Features</a>
+</nav>
+
+<header id="home">
+  <h1>Flexbox and Grid Layout Guide</h1>
+  <p>This page uses both layout systems, and explains each one next to a live example. Resize the browser window to see the layout change.</p>
+</header>
+
+<main>
+
+<!-- Flexbox -->
+<section id="flexbox">
+  <h2>Flexbox: a row of items that share space</h2>
+  <div class="two-col">
+    <div>
+      <p>Flexbox lays items out in one direction at a time, in a row or in a column. It suits menus, toolbars and card rows. The menu at the top of this page and the three cards below are both flexbox layouts.</p>
+      <p>The cards sit in a container with <code>display: flex</code>. Each card has <code>flex: 1 1 220px</code>, so it can grow, can shrink, and starts at 220px wide. When the row is too narrow, <code>flex-wrap: wrap</code> moves a card down to the next line.</p>
+    </div>
+    <div class="card"><h3>Container CSS</h3>
+<code>display: flex;</code><br><code>flex-wrap: wrap;</code><br><code>gap: 16px;</code><br><code>justify-content: space-between;</code></div>
+  </div>
+
+  <div class="flex-demo">
+    <div class="card"><img alt="Blue wave pattern" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 110'%3E%3Crect width='200' height='110' fill='%230b7285'/%3E%3Cpath d='M0 70 Q25 40 50 70 T100 70 T150 70 T200 70 V110 H0Z' fill='%2314213d'/%3E%3C/svg%3E"><h3>Card 1</h3><p>Grows to fill the free space.</p></div>
+    <div class="card"><img alt="Orange sun over hills" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 110'%3E%3Crect width='200' height='110' fill='%2314213d'/%3E%3Ccircle cx='100' cy='60' r='30' fill='%23f4a259'/%3E%3Crect y='80' width='200' height='30' fill='%230b7285'/%3E%3C/svg%3E"><h3>Card 2</h3><p>Same width as the others on its row.</p></div>
+    <div class="card"><img alt="Teal and amber squares" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 110'%3E%3Crect width='200' height='110' fill='%23f4a259'/%3E%3Crect x='20' y='20' width='70' height='70' fill='%2314213d'/%3E%3Crect x='110' y='20' width='70' height='70' fill='%230b7285'/%3E%3C/svg%3E"><h3>Card 3</h3><p>Wraps to a new line on narrow screens.</p></div>
+  </div>
+
+  <h3>Flexbox settings and their effect</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Property</th><th>What it does</th></tr>
+    <tr><td><code>display: flex</code></td><td>Turns the container into a flex container. Its children become flex items.</td></tr>
+    <tr><td><code>flex-direction</code></td><td><code>row</code> (default) lays items side by side. <code>column</code> stacks them.</td></tr>
+    <tr><td><code>justify-content</code></td><td>Spaces items along the main axis: <code>center</code>, <code>space-between</code>, <code>space-around</code>.</td></tr>
+    <tr><td><code>align-items</code></td><td>Aligns items across the other axis: <code>center</code>, <code>stretch</code>, <code>flex-start</code>.</td></tr>
+    <tr><td><code>flex-wrap</code></td><td>Lets items move to a new line when they do not fit.</td></tr>
+    <tr><td><code>flex: grow shrink basis</code></td><td>Sets how an item grows, shrinks and what size it starts at.</td></tr>
+    <tr><td><code>gap</code></td><td>Adds space between items without using margins.</td></tr>
+  </table></div>
+</section>
+
+<!-- Grid -->
+<section id="grid">
+  <h2>Grid: rows and columns together</h2>
+  <p>Grid controls rows and columns at the same time. It suits whole page layouts and galleries. The demo below has three equal columns made with <code>grid-template-columns: repeat(3, 1fr)</code>. The <code>1fr</code> unit means one share of the free space. The wide box uses <code>grid-column: span 2</code> to cover two columns.</p>
+
+  <div class="grid-demo">
+    <div class="card wide"><h3>Wide box (span 2)</h3><p>Takes up two of the three columns.</p></div>
+    <div class="card"><h3>Box 2</h3><p>One column.</p></div>
+    <div class="card"><h3>Box 3</h3><p>One column.</p></div>
+    <div class="card"><h3>Box 4</h3><p>One column.</p></div>
+    <div class="card"><h3>Box 5</h3><p>One column.</p></div>
+  </div>
+
+  <h3>Grid settings and their effect</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Property</th><th>What it does</th></tr>
+    <tr><td><code>display: grid</code></td><td>Turns the container into a grid container.</td></tr>
+    <tr><td><code>grid-template-columns</code></td><td>Defines the number and width of columns, for example <code>1fr 2fr</code> or <code>repeat(3, 1fr)</code>.</td></tr>
+    <tr><td><code>grid-template-rows</code></td><td>Defines the height of rows.</td></tr>
+    <tr><td><code>gap</code></td><td>Sets the space between rows and columns.</td></tr>
+    <tr><td><code>grid-column</code> / <code>grid-row</code></td><td>Places an item or makes it span several cells.</td></tr>
+    <tr><td><code>align-items</code> / <code>justify-items</code></td><td>Aligns items inside their cells.</td></tr>
+  </table></div>
+</section>
+
+<!-- Responsive -->
+<section id="responsive">
+  <h2>How the layout responds to screen size</h2>
+  <div class="two-col">
+    <div>
+      <p><strong>Flexbox cards:</strong> three cards fit on one row on a wide screen. On a tablet two cards fit, and on a phone each card has its own row. This happens automatically because of <code>flex-wrap</code> and the 220px basis.</p>
+      <p><strong>Grid boxes:</strong> a media query changes the column count. Above 700px there are 3 columns. Between 480px and 700px there are 2 columns. Below 480px there is 1 column, and the wide box stops spanning.</p>
+      <p><strong>Explanation sections:</strong> the text and the CSS box sit in a two-column grid (<code>2fr 1fr</code>). Below 700px it becomes one column.</p>
+      <p><strong>Menu:</strong> the icon bar uses flexbox, so every link shares the width equally. On small phones the text size shrinks.</p>
+    </div>
+    <div class="card"><h3>Media query</h3>
+<code>@media (max-width: 700px) {</code><br>&nbsp;&nbsp;<code>.grid-demo {</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>grid-template-columns: 1fr 1fr;</code><br>&nbsp;&nbsp;<code>}</code><br><code>}</code></div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features">
+  <h2>Features and when to use them</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Feature</th><th>How to use it</th></tr>
+    <tr><td>Icon bar menu</td><td>Put links in a <code>nav</code> with <code>display: flex</code> and <code>flex: 1</code> on each link. Use <code>position: sticky</code> to keep it at the top.</td></tr>
+    <tr><td>Flexbox or Grid?</td><td>Use flexbox for a single row or column. Use grid when you need rows and columns together.</td></tr>
+    <tr><td><code>repeat(auto-fit, minmax(200px, 1fr))</code></td><td>Makes a grid that picks its own column count without media queries.</td></tr>
+    <tr><td>Images</td><td>Use <code>width: 100%</code> and <code>object-fit: cover</code> so images fill their card at any size.</td></tr>
+    <tr><td>Viewport meta tag</td><td>Needed in the <code>head</code> so phones use the real screen width.</td></tr>
+  </table></div>
+</section>
+
+</main>
+
+<footer>Flexbox and Grid assignment page</footer>
+
+<script>
+  // Highlight the menu item for the section being viewed
+  var links = document.querySelectorAll('.iconbar a');
+  var ids = ['home','flexbox','grid','responsive','features'];
+  window.addEventListener('scroll', function () {
+    var current = 'home';
+    ids.forEach(function (id) {
+      if (document.getElementById(id).getBoundingClientRect().top < 120) { current = id; }
+    });
+    links.forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>
